@@ -6,9 +6,10 @@
 \usage{
 map_tb_burden(df = NULL, dict = NULL, metric = "e_inc_100k",
   metric_label = NULL, countries = NULL, compare_to_region = FALSE,
-  facet = NULL, year = 2016, trans = "identity", interactive = FALSE,
-  download_data = FALSE, save = FALSE, burden_save_name = "TB_burden",
-  dict_save_name = "TB_data_dict", verbose = TRUE, ...)
+  facet = NULL, year = 2016, annual_change = FALSE, trans = "identity",
+  interactive = FALSE, download_data = TRUE, save = TRUE,
+  burden_save_name = "TB_burden", dict_save_name = "TB_data_dict",
+  verbose = TRUE, ...)
 }
 \arguments{
 \item{df}{Dataframe of TB burden data, as sourced by \code{\link[getTBinR]{get_tb_burden}}.
@@ -33,18 +34,21 @@ Note that this will override settings for \code{facet}, unless it is set to "cou
 
 \item{year}{Numeric, indicating the year of data to map. Defaults to 2016.}
 
-\item{trans}{A character string specifying the transform to use on the mapped metric. Defaults to no
+\item{annual_change}{Logical, defaults to \code{FALSE}. If \code{TRUE} then the
+percentage annual change is computed for the specified metric.}
+
+\item{trans}{A character string specifying the transform to use on the specified metric. Defaults to no
 transform ("identity"). Other options include log scaling ("log") and log base 10 scaling
 ("log10"). For a complete list of options see \code{ggplot2::continous_scale}.}
 
 \item{interactive}{Logical, defaults to \code{FALSE}. If \code{TRUE} then an interactive plot is
 returned.}
 
-\item{download_data}{Logical, defaults to \code{FALSE}. If not found locally should the data be
+\item{download_data}{Logical, defaults to \code{TRUE}. If not found locally should the data be
 downloaded from the specified URL?}
 
 \item{save}{Logical, should the data be saved for reuse during the current R session. Defaults to
-\code{FALSE}. If \code{TRUE} then the data is saved to the temporary directory specified by \code{\link[base]{tempdir}}.}
+\code{TRUE}. If \code{TRUE} then the data is saved to the temporary directory specified by \code{\link[base]{tempdir}}.}
 
 \item{burden_save_name}{Character string, name to save the data under. Defaults to
 \code{TB_burden}.}
@@ -68,10 +72,13 @@ Various other options are available for tuning the plot further.
 \examples{
 
 ## Map raw incidence rates
-map_tb_burden(download_data = TRUE, save = TRUE)
+map_tb_burden()
 
-## Map log scaled incidence rates
-map_tb_burden(trans = "log")
+## Map log10 scaled incidence rates
+map_tb_burden(trans = "log10")
+
+## Map percentage annual change in incidence rates
+map_tb_burden(annual_change = TRUE)
 
 ## Find variables relating to mortality in the WHO dataset
 search_data_dict(def = "mortality")

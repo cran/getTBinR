@@ -13,7 +13,7 @@ library(magrittr)
 library(dplyr)
 
 ## ----get-tb-burden-data--------------------------------------------------
-tb_burden <- get_tb_burden(download_data = TRUE, save = TRUE)
+tb_burden <- get_tb_burden()
 
 tb_burden
 
@@ -21,9 +21,7 @@ tb_burden
 vars_of_interest <- search_data_dict(var = c("country",
                                              "e_inc_100k",
                                              "e_inc_100k_lo",
-                                             "e_inc_100k_hi"),
-                                     download_data = TRUE, 
-                                     save = TRUE)
+                                             "e_inc_100k_hi"))
 
 knitr::kable(vars_of_interest)
 
@@ -45,6 +43,19 @@ getTBinR::map_tb_burden(metric = "e_inc_100k",
 ## ----plot-tb-all, fig.height=20, fig.width = 10--------------------------
 getTBinR::plot_tb_burden_overview(metric = "e_inc_100k",
                                   interactive = FALSE)
+
+## ----plot-tb-al-per, fig.height=20, fig.width = 10-----------------------
+higher_burden_countries <- tb_burden %>% 
+  group_by(country) %>% 
+  summarise(e_inc_100k = min(e_inc_100k)) %>% 
+  filter(e_inc_100k > 5) %>% 
+  pull(country) %>% 
+  unique
+
+getTBinR::plot_tb_burden_overview(metric = "e_inc_100k",
+                                  interactive = FALSE,
+                                  annual_change = TRUE,
+                                  countries = higher_burden_countries)
 
 ## ----plot-incidence------------------------------------------------------
 ## Take a random sample of countries
