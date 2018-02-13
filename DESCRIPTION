@@ -1,6 +1,6 @@
 Package: getTBinR
 Type: Package
-Version: 0.5.1
+Version: 0.5.2
 Title: Get WHO Tuberculosis Data
 Authors@R: c(person("Sam Abbott", role = c("aut", "cre"),
                      email = "contact@samabbott.co.uk"))
@@ -19,8 +19,8 @@ Suggests: devtools, testthat, covr, rmarkdown, knitr, tidyverse, shiny,
 Imports: data.table, tibble, dplyr, purrr, ggplot2, magrittr, plotly,
         ggthemes, viridis, scales
 NeedsCompilation: no
-Packaged: 2018-01-26 13:55:51 UTC; getTBinR
+Packaged: 2018-02-13 22:25:04 UTC; seabbs
 Author: Sam Abbott [aut, cre]
 Maintainer: Sam Abbott <contact@samabbott.co.uk>
 Repository: CRAN
-Date/Publication: 2018-01-26 13:47:08 UTC
+Date/Publication: 2018-02-13 22:32:27 UTC
