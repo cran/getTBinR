@@ -5,11 +5,12 @@
 \title{Map TB Burden}
 \usage{
 map_tb_burden(df = NULL, dict = NULL, metric = "e_inc_100k",
-  metric_label = NULL, countries = NULL, compare_to_region = FALSE,
-  facet = NULL, year = 2016, annual_change = FALSE, trans = "identity",
-  interactive = FALSE, download_data = TRUE, save = TRUE,
-  burden_save_name = "TB_burden", dict_save_name = "TB_data_dict",
-  verbose = TRUE, ...)
+  metric_label = NULL, fill_var_type = NULL, countries = NULL,
+  compare_to_region = FALSE, facet = NULL, year = NULL,
+  annual_change = FALSE, trans = "identity", interactive = FALSE,
+  download_data = TRUE, save = TRUE, burden_save_name = "TB_burden",
+  dict_save_name = "TB_data_dict", viridis_palette = "viridis",
+  viridis_direction = -1, viridis_end = 0.9, verbose = TRUE, ...)
 }
 \arguments{
 \item{df}{Dataframe of TB burden data, as sourced by \code{\link[getTBinR]{get_tb_burden}}.
@@ -24,6 +25,9 @@ dictionary. If this fails and \code{download_data = TRUE} then the dictionary wi
 
 \item{metric_label}{Character string specifying the metric label to use.}
 
+\item{fill_var_type}{A character string, defaults to \code{NULL}. To set the fill variable type to be
+discrete use "discrete" and to be continous use "continous".}
+
 \item{countries}{A character string specifying the countries to plot.}
 
 \item{compare_to_region}{Logical, defaults to \code{FALSE}. If \code{TRUE} all
@@ -32,8 +36,8 @@ Note that this will override settings for \code{facet}, unless it is set to "cou
 
 \item{facet}{Character string, the name of the variable to facet by.}
 
-\item{year}{Numeric, indicating the year of data to map. Defaults to 2016. If \code{interactive = TRUE}
-then multiple years may be passed as a vector, the result will then be animated over years.}
+\item{year}{Numeric, indicating the year of data to map. Defaults to the latest year in the data.
+If \code{interactive = TRUE} then multiple years may be passed as a vector, the result will then be animated over years.}
 
 \item{annual_change}{Logical, defaults to \code{FALSE}. If \code{TRUE} then the
 percentage annual change is computed for the specified metric.}
@@ -56,6 +60,16 @@ downloaded from the specified URL?}
 
 \item{dict_save_name}{Character string, name to save dictionary under. Defaults to
 \code{TB_data_dict}.}
+
+\item{viridis_palette}{Character string indicating the \code{viridis} colour palette to use. Defaults
+to "viridis". Options include "cividis", "magma", "inferno", "plasma", and "viridis". For additional details
+see \code{\link[viridis]{viridis_pal}} for additional details.}
+
+\item{viridis_direction}{Numeric, indicating the direction for the colour palette (1 or -1), defaults to -1.
+See \code{\link[viridis]{scale_color_viridis}} for additional details.}
+
+\item{viridis_end}{Numeric between 0 and 1, defaults to 0.9. The end point of the viridis scale to use.
+#' See \code{\link[viridis]{scale_color_viridis}} for additional details.}
 
 \item{verbose}{Logical, defaults to \code{TRUE}. Should additional status and progress messages
 be displayed.}

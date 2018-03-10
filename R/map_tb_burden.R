@@ -3,8 +3,10 @@
 #' @description Map measures of TB burden by country by specifying a metric from the TB burden data.
 #' Specify a country or vector of countries in order to map them (the default is to map all countries).
 #' Various other options are available for tuning the plot further.
-#' @param year Numeric, indicating the year of data to map. Defaults to 2016. If \code{interactive = TRUE}
-#' then multiple years may be passed as a vector, the result will then be animated over years.
+#' @param year Numeric, indicating the year of data to map. Defaults to the latest year in the data.
+#' If \code{interactive = TRUE} then multiple years may be passed as a vector, the result will then be animated over years.
+#' @param fill_var_type A character string, defaults to \code{NULL}. To set the fill variable type to be
+#' discrete use "discrete" and to be continous use "continous".
 #' @inheritParams plot_tb_burden
 #' @seealso plot_tb_burden plot_tb_burden_overview get_tb_burden search_data_dict
 #' @return A plot of TB Incidence Rates by Country
@@ -38,9 +40,10 @@
 map_tb_burden <- function(df = NULL, dict = NULL,
                            metric = "e_inc_100k",
                            metric_label = NULL,
+                           fill_var_type = NULL,
                            countries = NULL,
                            compare_to_region = FALSE,
-                           facet = NULL, year = 2016,
+                           facet = NULL, year = NULL,
                            annual_change = FALSE,
                            trans = "identity",
                            interactive = FALSE, 
@@ -48,14 +51,15 @@ map_tb_burden <- function(df = NULL, dict = NULL,
                            save = TRUE,
                            burden_save_name = "TB_burden",
                            dict_save_name = "TB_data_dict",
+                           viridis_palette = "viridis",
+                           viridis_direction = -1,
+                           viridis_end = 0.9,
                            verbose = TRUE, ...) {
 
   if (!interactive && length(year) > 1) {
     stop("When not producing interactive plots only a single year of data must be used. 
          Please specify a single year (i.e 2016)")
   }
-  
-  sel_year <- year
   
   df_prep <- prepare_df_plot(df = df, dict = dict,
                              metric = metric,
@@ -71,6 +75,30 @@ map_tb_burden <- function(df = NULL, dict = NULL,
                              dict_save_name = dict_save_name,
                              verbose = verbose)
   
+  ## Guess at variable type for filling
+  if (is.null(fill_var_type)) {
+    if (is.numeric(df_prep$df[[metric]])) {
+      fill_var_type <- FALSE
+    }else{
+      fill_var_type <- TRUE
+    }
+  }else{
+    if (fill_var_type %in% "discrete") {
+      fill_var_type <- TRUE
+    }else if (fill_var_type %in% "continuous") {
+      fill_var_type <- FALSE
+    }else{
+      stop('fill_var_type must be either NULL, "discrete" or "continuous"')
+    }
+  }
+  ## Get latest data year
+  if (is.null(year)){
+    sel_year <- df_prep$df$year %>% 
+      max
+  }else{
+    sel_year <- year
+  }
+
   ## Bind in world data
   df_prep$df <- df_prep$df %>% 
     left_join(getTBinR::who_shapefile, c("iso3" = "id")) %>% 
@@ -91,6 +119,7 @@ map_tb_burden <- function(df = NULL, dict = NULL,
     }
   }
   
+  ## Check if variable is discrete or continous
   plot <- ggplot(df_prep$df, 
                  aes_string(x = "long", 
                             y = "lat", 
@@ -101,17 +130,20 @@ map_tb_burden <- function(df = NULL, dict = NULL,
     geom_polygon(aes_string(group = "group")) + 
     coord_equal() +
     ggthemes::theme_map() +
-    theme(legend.position = "bottom") 
+    theme(legend.position = "bottom") +
+    labs(caption = "Source: World Health Organisation")
   
   if (annual_change) {
     plot <- plot +
-      scale_fill_viridis(end = 0.95, trans = trans, 
-                         direction = -1, discrete = FALSE,
-                         labels = percent)
+      scale_fill_viridis(end = viridis_end, trans = trans, 
+                         direction = viridis_direction, discrete = fill_var_type,
+                         labels = percent, 
+                         option = viridis_palette)
   }else{
     plot <- plot +
-      scale_fill_viridis(end = 0.95, trans = trans, 
-                         direction = -1, discrete = FALSE)
+      scale_fill_viridis(end = viridis_end, trans = trans, 
+                         direction = viridis_direction, discrete = fill_var_type,
+                         option = viridis_palette)
   }
   if (!is.null(df_prep$facet)) {
     plot <- plot + 

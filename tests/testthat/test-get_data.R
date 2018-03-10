@@ -25,11 +25,11 @@ test_that("get_data saves a local copy of the data which can then be successfull
 })
 
 test_that("get_data can download data using utils alternative", {
-  tb_data_utils <- get_data(url = url,
-                            download_data = TRUE,
-                            use_utils = TRUE)
   
-  expect_true(!is.null(tb_data_utils))
+  skip_on_cran()
+  expect_true(!is.null(get_data(url = url, 
+                                download_data = TRUE,
+                                use_utils = TRUE)))
 })
 
 
@@ -38,4 +38,14 @@ test_that("get_data fails to download the data when an incorrect URL is given.",
                         download_data = TRUE,
                         retry_download = FALSE,
                         save_name = "test_no_url"))
+})
+
+
+test_that("get_data can download data using direct download alternative.", {
+
+  skip_on_cran()
+  expect_true(!is.null(get_data(url = url, 
+                                download_data = TRUE,
+                                use_direct_download = TRUE,
+                                save_name = "direct_test")))
 })

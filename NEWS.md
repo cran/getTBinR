@@ -1,3 +1,20 @@
+# getTBinR 0.5.3.0
+
+## Feature updates
+
+* Added `viridis_palette` option to all plotting functions to allow the colour scheme to be set by the user.
+* Added ability to handle categories in the legend for `map_tb_burden`
+* Added new case study exploring case fatality rates.
+
+## Package updates
+
+* Added improved tests in response to WHO data updates. See [here](https://github.com/seabbs/getTBinR/issues/28)
+* Added an additional method for downloading data in reponse to test failures
+on CRAN. See [here](https://github.com/seabbs/getTBinR/issues/29)
+* Added skip on CRAN for data backend related tests.
+* Added `Makefile` at top level and for `data-raw` to build the package.
+
+
 # getTBinR 0.5.2.0
 
 ## Feature updates
