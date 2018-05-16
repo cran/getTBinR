@@ -25,6 +25,9 @@
 #' ## Map raw incidence rates
 #' map_tb_burden()
 #' 
+#' #' ## Map raw incidence rates
+#' map_tb_burden(year = 2012:2015, facet = "year")
+#' \dontrun{
 #' ## Map log10 scaled incidence rates
 #' map_tb_burden(trans = "log10")
 #' 
@@ -37,6 +40,9 @@
 #' ## Map mortality rates (exc HIV) - without progress messages
 #' map_tb_burden(metric = "e_mort_exc_tbhiv_100k", verbose = FALSE)
 #' 
+#' ## Can also use a discrete metric if one is available
+#' map_tb_burden(metric = "g_whoregion", metric_label = "WHO world region")
+#' }
 map_tb_burden <- function(df = NULL, dict = NULL,
                            metric = "e_inc_100k",
                            metric_label = NULL,
@@ -55,10 +61,13 @@ map_tb_burden <- function(df = NULL, dict = NULL,
                            viridis_direction = -1,
                            viridis_end = 0.9,
                            verbose = TRUE, ...) {
+  if (!is.null(facet) && facet %in% "year") {
+    facet <- "Year"
+  }
 
-  if (!interactive && length(year) > 1) {
+  if (!interactive && length(year) > 1 && !facet %in% "Year") {
     stop("When not producing interactive plots only a single year of data must be used. 
-         Please specify a single year (i.e 2016)")
+         Please specify a single year (i.e 2016). Alternatively facet over year using facet = 'year'")
   }
   
   df_prep <- prepare_df_plot(df = df, dict = dict,
@@ -103,16 +112,10 @@ map_tb_burden <- function(df = NULL, dict = NULL,
   df_prep$df <- df_prep$df %>% 
     left_join(getTBinR::who_shapefile, c("iso3" = "id")) %>% 
     filter(year %in% sel_year)
-  
-  ## Format year
-  df_prep$df <- df_prep$df %>% 
-    rename(Year = year)
-  
-  ## Change metric label
-   names(df_prep$df)[names(df_prep$df) == metric] <- df_prep$metric_label
    
    country <- NULL
-  
+   group <- NULL
+   
   if (compare_to_region) {
     if (length(countries) == 1) {
       df_prep$facet <- NULL
@@ -128,22 +131,41 @@ map_tb_burden <- function(df = NULL, dict = NULL,
                             key = "country",
                             frame = "Year")) +
     geom_polygon(aes_string(group = "group")) + 
+    geom_path(aes(group = group), alpha = 0.4, col = "black") +
     coord_equal() +
     ggthemes::theme_map() +
     theme(legend.position = "bottom") +
     labs(caption = "Source: World Health Organisation")
   
   if (annual_change) {
-    plot <- plot +
-      scale_fill_viridis(end = viridis_end, trans = trans, 
-                         direction = viridis_direction, discrete = fill_var_type,
-                         labels = percent, 
-                         option = viridis_palette)
+    
+    if (fill_var_type) {
+      plot <- plot +
+        scale_fill_viridis(end = viridis_end, 
+                           direction = viridis_direction, discrete = TRUE,
+                           labels = percent, 
+                           option = viridis_palette)
+    }else{
+      plot <- plot +
+        scale_fill_viridis(end = viridis_end, trans = trans,
+                           direction = viridis_direction, discrete = FALSE,
+                           labels = percent, 
+                           option = viridis_palette)
+    }
   }else{
-    plot <- plot +
-      scale_fill_viridis(end = viridis_end, trans = trans, 
-                         direction = viridis_direction, discrete = fill_var_type,
-                         option = viridis_palette)
+    
+    if (fill_var_type) {
+      plot <- plot +
+        scale_fill_viridis(end = viridis_end, 
+                           direction = viridis_direction, discrete = TRUE,
+                           option = viridis_palette)
+    }else{
+      plot <- plot +
+        scale_fill_viridis(end = viridis_end, trans = trans,
+                           direction = viridis_direction, discrete = FALSE,
+                           option = viridis_palette)
+    }
+
   }
   if (!is.null(df_prep$facet)) {
     plot <- plot + 

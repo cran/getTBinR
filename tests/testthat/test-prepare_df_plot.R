@@ -34,9 +34,10 @@ test_that("TB burden data is correctly processed ready for plotting", {
   expect_equal("Estimated incidence (all forms) per 100 000 population",
                df_all$metric_label)
   expect_equal("tbl_df", class(df_all$df)[1])
-  expect_equal(3651, nrow(df_all$df))
-  expect_equal(73, ncol(df_all$df))
+  expect_true(1 <= nrow(df_all$df))
+  expect_true(1 <= ncol(df_all$df))
   expect_equal(0, sum(is.na(df_all$df$country)))
+  expect_true(!any(duplicated(colnames(df_all$df))))
 })
 
 test_that("TB burden data is correctly proccessed when using local data", {

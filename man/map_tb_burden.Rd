@@ -56,7 +56,7 @@ downloaded from the specified URL?}
 \code{TRUE}. If \code{TRUE} then the data is saved to the temporary directory specified by \code{\link[base]{tempdir}}.}
 
 \item{burden_save_name}{Character string, name to save the data under. Defaults to
-\code{TB_burden}.}
+"TB_burden".}
 
 \item{dict_save_name}{Character string, name to save dictionary under. Defaults to
 \code{TB_data_dict}.}
@@ -89,6 +89,9 @@ Various other options are available for tuning the plot further.
 ## Map raw incidence rates
 map_tb_burden()
 
+#' ## Map raw incidence rates
+map_tb_burden(year = 2012:2015, facet = "year")
+\dontrun{
 ## Map log10 scaled incidence rates
 map_tb_burden(trans = "log10")
 
@@ -101,6 +104,9 @@ search_data_dict(def = "mortality")
 ## Map mortality rates (exc HIV) - without progress messages
 map_tb_burden(metric = "e_mort_exc_tbhiv_100k", verbose = FALSE)
 
+## Can also use a discrete metric if one is available
+map_tb_burden(metric = "g_whoregion", metric_label = "WHO world region")
+}
 }
 \seealso{
 plot_tb_burden plot_tb_burden_overview get_tb_burden search_data_dict
