@@ -1,6 +1,6 @@
 Package: getTBinR
 Type: Package
-Version: 0.5.4
+Version: 0.5.5
 Title: Get WHO Tuberculosis Data
 Authors@R: c(person("Sam Abbott", role = c("aut", "cre"),
                      email = "contact@samabbott.co.uk",
@@ -8,11 +8,11 @@ Authors@R: c(person("Sam Abbott", role = c("aut", "cre"),
 Description: Facilitates easy import of analysis ready World Health Organisation Tuberculosis data and provides plotting functions for exploratory data analysis.
 License: GPL-3 | file LICENSE
 VignetteBuilder: knitr
-URL: http://www.samabbott.co.uk/getTBinR,
+URL: https://www.samabbott.co.uk/getTBinR,
         https://github.com/seabbs/getTBinR
 BugReports: https://github.com/seabbs/getTBinR/issues
 Encoding: UTF-8
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 LazyData: true
 Depends: R (>= 2.10)
 Suggests: devtools, testthat, vdiffr, covr, pkgnet, rmarkdown, knitr,
@@ -20,8 +20,8 @@ Suggests: devtools, testthat, vdiffr, covr, pkgnet, rmarkdown, knitr,
 Imports: data.table, tibble, dplyr, tidyr, purrr, ggplot2, magrittr,
         plotly, ggthemes, viridis, scales
 NeedsCompilation: no
-Packaged: 2018-05-16 15:20:54 UTC; gettbinr
+Packaged: 2018-09-28 11:30:46 UTC; getTBinR
 Author: Sam Abbott [aut, cre] (<https://orcid.org/0000-0001-8057-8037>)
 Maintainer: Sam Abbott <contact@samabbott.co.uk>
 Repository: CRAN
-Date/Publication: 2018-05-16 16:19:49 UTC
+Date/Publication: 2018-09-28 12:00:09 UTC

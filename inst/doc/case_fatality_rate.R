@@ -28,23 +28,23 @@ search_data_dict("cfr", verbose = FALSE) %>%
   knitr::kable()
 
 ## ----make-inc-map, message = FALSE---------------------------------------
-# Map TB incidence rates - 2016
-mp1 <- map_tb_burden(year = 2016, verbose = FALSE, 
+# Map TB incidence rates
+mp1 <- map_tb_burden(verbose = FALSE, 
                      viridis_palette = "cividis", 
                      viridis_direction = -1
                      ) +
-  labs(title = "Map of Tuberculosis Incidence Rates - 2016",
+  labs(title = "Map of Tuberculosis Incidence Rates",
        subtitle = "Incidence rates are per 100,000 population")
 
 mp1 
 
 ## ----make-cfr-map, message = FALSE---------------------------------------
 # Map TB case fatality ratio -2016
-mp2 <- map_tb_burden(metric = "cfr", year = 2016, 
+mp2 <- map_tb_burden(metric = "cfr", 
                      viridis_palette = "cividis", 
                      viridis_direction = -1,
                      verbose= FALSE) +
-  labs(title = "Map of Tuberculosis Case Fatality Ratio - 2016",
+  labs(title = "Map of Tuberculosis Case Fatality Ratio",
        subtitle = "Case fatality rate estimated by the WHO")
 
 mp2
@@ -92,7 +92,7 @@ plot_inc_region <- tb_burden %>%
   rate_region(metric = "e_inc_num") %>% 
   plot_rate_region(metric = "e_inc_num",
                    title = "Tuberculosis Incidence Rates",
-                   subtitle = "By region: 2000 to 2016",
+                   subtitle = "By region and year",
                    scales = "free_y",
                    y_lab = "Tuberculosis Incidence Rates (per 100,000 population)")
 
@@ -104,7 +104,7 @@ plot_mort_region <- tb_burden %>%
   rate_region(metric = "e_mort_num") %>% 
   plot_rate_region(metric = "e_mort_num",
                    title = "Tuberculosis Mortality Rates",
-                   subtitle = "By region: 2000 to 2016",
+                   subtitle = "By region and year",
                    scales = "free_y",
                    y_lab = "Tuberculosis Mortality Rates (per 100,000 population)")
 
@@ -112,9 +112,9 @@ plot_mort_region +
   labs(caption = "Source: World Health Organisation")
 
 ## ----sum-cfr-region------------------------------------------------------
-## Summarise Case fatality rate by region - only availble for 2016
+## Summarise Case fatality rate by region - only availble for most recent year
 region_case_fat <- tb_burden %>% 
-  filter(year %in% 2016) %>% 
+  filter(year %in% max(year)) %>% 
   group_by(year, g_whoregion) %>% 
   summarise(mean = mean(cfr, na.rm = TRUE),
             sd = sd(cfr, na.rm = TRUE)) %>% 
@@ -140,10 +140,10 @@ region_case_fatality
 plot_region_case_fatality <- region_case_fatality %>%
   plot_rate_region(metric = "case_fat_rate",
                    title = "Tuberculosis Case Fatality Rate",
-                   subtitle = "By WHO region: 2000 to 2016",
+                   subtitle = "By WHO region abd year",
                    scales = "free_y",
                    y_lab = "Estimated TB Case Fatality Ratio") +
-  labs(caption = "Case fatality ratio estimated by taking the ratio of TB mortality rates and TB incidence rates each year in all years. For 2016 
+  labs(caption = "Case fatality ratio estimated by taking the ratio of TB mortality rates and TB incidence rates each year in all years. For the most recent year 
        the mean regional case fatality ratio estimated by the WHO is also shown (along with one and two standard deviations)") +
   geom_point(data = region_case_fat, aes(y = mean, x = year, fill = g_whoregion), shape = 2, size = 1.3, col = "black") +
   geom_linerange(data = region_case_fat, aes(ymin = ll, ymax = hh, y = NULL), alpha = 0.4, size = 1.2, col = "black") +
@@ -154,7 +154,7 @@ plot_region_case_fatality +
 
 ## ----pull-highest-cfr-countries------------------------------------------
 highest_case_fataltity_countries <- tb_burden %>% 
-  filter(year %in% 2016) %>% 
+  filter(year %in% max(year)) %>% 
   arrange(desc(cfr)) %>% 
   slice(1:10) %>% 
   pull(country)
@@ -184,8 +184,8 @@ plot_inc_high_cfr <- plot_tb_burden_overview(countries = highest_case_fataltity_
                                              viridis_end = 0.9) +
   theme(legend.position = "none") +
   theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = "Tuberculosis Incidence Rates - 2000:2016",
+  theme(legend.position = "right") +
+  labs(title = "Tuberculosis Incidence Rate",
        subtitle = "In the countries with the 10 highest TB case fatality ratios")
 
 plot_inc_high_cfr 

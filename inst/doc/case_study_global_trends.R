@@ -22,7 +22,7 @@ search_data_dict(dict = dict, def = "incidence", verbose = FALSE) %>%
   knitr::kable()
 
 ## ----map-tb-2016-inc-----------------------------------------------------
-map_tb_burden(df = tb_burden, dict = dict,
+map_tb_burden(df = tb_burden, dict = dict, year = 2016,
               metric = "e_inc_100k", verbose = FALSE) +
   labs(title = "Map of Global Tuberculosis Incidence Rates - 2016",
        subtitle = "", caption = "Source: World Health Organisation")
@@ -97,7 +97,7 @@ plot_tb_burden(df = tb_burden,
                dict = dict,
                metric = "e_inc_100k", countries = high_inc_up_countries, 
                facet = "country", scales = "free_y", verbose = FALSE) +
-  labs(title = "Tuberculosis Incidence Rates from 2000-2016",
+  labs(title = "Tuberculosis Incidence Rates",
        subtitle = "Showing countries with the highest incidence rates in which incidence rates are increasing",
        caption = "Source: World Health Organisation")
 
@@ -110,7 +110,7 @@ plot_tb_burden(df = tb_burden,
                dict = dict,
                metric = "c_cdr", countries = high_inc_up_countries, 
                facet = "country", scales = "free_y", verbose = FALSE) +
-  labs(title = "Tuberculosis Detection Rates from 2000-2016",
+  labs(title = "Tuberculosis Detection Rates",
        subtitle = "Showing countries with the highest incidence rates in which incidence rates are increasing",
        caption = "Source: World Health Organisation")
 

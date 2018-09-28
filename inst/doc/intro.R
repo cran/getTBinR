@@ -37,8 +37,7 @@ vars_defs_of_interest <- search_data_dict(var = c("country"),
 knitr::kable(vars_defs_of_interest)
 
 ## ----map-tb-incidence-eur, fig.width = 15--------------------------------
-getTBinR::map_tb_burden(metric = "e_inc_100k",
-                        year = 2016)
+getTBinR::map_tb_burden(metric = "e_inc_100k")
 
 ## ----plot-tb-all, fig.height=20, fig.width = 10--------------------------
 getTBinR::plot_tb_burden_overview(metric = "e_inc_100k",
