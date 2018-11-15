@@ -24,10 +24,10 @@
 #' 
 #' ## Map raw incidence rates
 #' map_tb_burden()
-#' 
+#' \dontrun{
 #' #' ## Map raw incidence rates
 #' map_tb_burden(year = 2014:2017, facet = "year")
-#' \dontrun{
+#' 
 #' ## Map log10 scaled incidence rates
 #' map_tb_burden(trans = "log10")
 #' 
@@ -128,7 +128,7 @@ map_tb_burden <- function(df = NULL, dict = NULL,
                  aes_string(x = "long", 
                             y = "lat", 
                             text = "country",
-                            fill = paste0("`", df_prep$metric_label, "`"),
+                            fill = metric,
                             key = "country",
                             frame = "Year")) +
     geom_polygon(aes_string(group = "group")) + 
@@ -136,6 +136,7 @@ map_tb_burden <- function(df = NULL, dict = NULL,
     coord_equal() +
     ggthemes::theme_map() +
     theme(legend.position = "bottom") +
+    guides(fill = guide_legend(title = df_prep$metric_label)) +
     labs(caption = "Source: World Health Organisation")
   
   if (annual_change) {
