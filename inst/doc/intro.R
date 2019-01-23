@@ -56,11 +56,15 @@ getTBinR::plot_tb_burden_overview(metric = "e_inc_100k",
                                   annual_change = TRUE,
                                   countries = higher_burden_countries)
 
+## ----plot-regional-summary-----------------------------------------------
+getTBinR::plot_tb_burden_summary(conf = NULL, metric_label = "e_inc_100k")
+
 ## ----plot-incidence------------------------------------------------------
 ## Take a random sample of countries
 sample_countries <- sample(unique(tb_burden$country), 9)
 plot_tb_burden(tb_burden, metric = "e_inc_100k",
-               countries = sample_countries)
+               countries = sample_countries,
+               legend = "top")
 
 ## ----plot-incidence-facet------------------------------------------------
 plot_tb_burden(tb_burden, metric = "e_inc_100k",

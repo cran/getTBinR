@@ -1,6 +1,6 @@
 Package: getTBinR
 Type: Package
-Version: 0.5.6
+Version: 0.5.7
 Title: Get WHO Tuberculosis Data
 Authors@R: c(person("Sam Abbott", role = c("aut", "cre"),
                      email = "contact@samabbott.co.uk",
@@ -16,12 +16,13 @@ RoxygenNote: 6.1.1
 LazyData: true
 Depends: R (>= 2.10)
 Suggests: devtools, testthat, vdiffr, covr, pkgnet, rmarkdown, knitr,
-        tidyverse, shiny, shinydashboard, shinyWidgets, shinycssloaders
+        tidyverse, shiny, shinydashboard, shinyWidgets,
+        shinycssloaders, hexSticker
 Imports: data.table, tibble, dplyr, tidyr, purrr, ggplot2, magrittr,
         plotly, ggthemes, viridis, scales
 NeedsCompilation: no
-Packaged: 2018-11-15 16:58:29 UTC; seabbs
+Packaged: 2019-01-22 22:30:18 UTC; seabbs
 Author: Sam Abbott [aut, cre] (<https://orcid.org/0000-0001-8057-8037>)
 Maintainer: Sam Abbott <contact@samabbott.co.uk>
 Repository: CRAN
-Date/Publication: 2018-11-15 17:20:03 UTC
+Date/Publication: 2019-01-23 10:50:07 UTC
