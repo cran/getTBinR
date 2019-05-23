@@ -17,6 +17,12 @@ tb_burden <- get_tb_burden()
 
 tb_burden
 
+## ----additional_datasets-------------------------------------------------
+knitr::kable(available_datasets[, 1:4])
+
+## ----import-additional_datasets------------------------------------------
+get_tb_burden(additional_datasets = "all", verbose = FALSE)
+
 ## ----search-data-dict----------------------------------------------------
 vars_of_interest <- search_data_dict(var = c("country",
                                              "e_inc_100k",
@@ -35,6 +41,11 @@ vars_defs_of_interest <- search_data_dict(var = c("country"),
                                      def = c("mortality"))
 
 knitr::kable(vars_defs_of_interest)
+
+## ----search-dataset------------------------------------------------------
+dataset_of_interest <- search_data_dict(dataset = "Latent")
+
+knitr::kable(dataset_of_interest)
 
 ## ----map-tb-incidence-eur, fig.width = 15--------------------------------
 getTBinR::map_tb_burden(metric = "e_inc_100k")
@@ -58,6 +69,11 @@ getTBinR::plot_tb_burden_overview(metric = "e_inc_100k",
 
 ## ----plot-regional-summary-----------------------------------------------
 getTBinR::plot_tb_burden_summary(conf = NULL, metric_label = "e_inc_100k")
+
+## ----summarise_metric----------------------------------------------------
+## Get a summary of TB incidence rates for the united kingdom and germany
+summarise_metric(metric = "e_inc_100k", countries = c("United Kingdom", "Germany")) %>% 
+  kable
 
 ## ----plot-incidence------------------------------------------------------
 ## Take a random sample of countries
