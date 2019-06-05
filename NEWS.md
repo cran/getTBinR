@@ -1,3 +1,12 @@
+# getTBinR 0.6.1
+
+## Package updates
+
+* Fixed a joining bug for additional datasets that was removing all new data.
+* Fixed a joining bug for budgets data that was removing all budgets data.
+* Fixed a bug with `summarise_tb_burden` that caused an error when confidence intervals were not 
+wanted and rates were estimated for countries.
+
 # getTBinR 0.6.0
 
 ## Feature updates
@@ -25,9 +34,9 @@
 
 ## Package updates
 
-* Added package information to license file - suggested during review for JOSS submission by @[rrrlw](/rrrlw).
-* Updated README introduction to better explain package aim -  suggested during review for JOSS submission by @[strengejacke](/strengejacke)
-* Improved package DESCRIPTION for CRAN only users - suggested during review for JOSS submission by @[rrrlw](/rrrlw).
+* Added package information to license file - suggested during review for JOSS submission by @[rrrlw](https://github.com/rrrlw).
+* Updated README introduction to better explain package aim -  suggested during review for JOSS submission by @[strengejacke](https://github.com/strengejacke)
+* Improved package DESCRIPTION for CRAN only users - suggested during review for JOSS submission by @[rrrlw](https://github.com/rrrlw).
 * Used `usethis::use_tidy_description` to improve DESCRIPTION formatting.
 * Added development documentation badge to the README + website.
 * Moved to automated pkgdown deployment using travis. Based on [this](https://pkgdown.r-lib.org/reference/deploy_site_github.html) and the [dplyr](https://github.com/tidyverse/dplyr/blob/master/.travis.yml) implementation.
