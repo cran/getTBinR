@@ -1,35 +1,33 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE, comment = "#>",
   fig.width = 7, fig.height = 7, 
   fig.align = "center"
 )
 
-## ----get-packages, message = FALSE---------------------------------------
-# install.packages("getTBinR")
+## ----get-packages, message = FALSE--------------------------------------------
 library(getTBinR)
-#  install.packages("tidyverse")
-library(tidyverse)
-# install.packages("viridis")
+library(dplyr)
+library(ggplot2)
 library(viridis)
-# install.packages("scales")
 library(scales)
+library(knitr)
 
-## ----get-data------------------------------------------------------------
-tb_burden <- get_tb_burden(verbose = FALSE)
-dict <- get_data_dict(verbose = FALSE)
+## ----get-data-----------------------------------------------------------------
+tb_burden <- get_tb_burden()
+dict <- get_data_dict()
 
 tb_burden
 
 dict
 
-## ----search-dict-inc-----------------------------------------------------
-search_data_dict("cfr", verbose = FALSE) %>% 
+## ----search-dict-inc----------------------------------------------------------
+search_data_dict("cfr") %>% 
   knitr::kable()
 
-## ----make-inc-map, message = FALSE---------------------------------------
+## ----make-inc-map, message = FALSE--------------------------------------------
 # Map TB incidence rates
-mp1 <- map_tb_burden(verbose = FALSE, 
+mp1 <- map_tb_burden( 
                      viridis_palette = "cividis", 
                      viridis_direction = -1
                      ) +
@@ -38,18 +36,17 @@ mp1 <- map_tb_burden(verbose = FALSE,
 
 mp1 
 
-## ----make-cfr-map, message = FALSE---------------------------------------
+## ----make-cfr-map, message = FALSE--------------------------------------------
 # Map TB case fatality ratio -2016
 mp2 <- map_tb_burden(metric = "cfr", 
                      viridis_palette = "cividis", 
-                     viridis_direction = -1,
-                     verbose= FALSE) +
+                     viridis_direction = -1) +
   labs(title = "Map of Tuberculosis Case Fatality Ratio",
        subtitle = "Case fatality rate estimated by the WHO")
 
 mp2
 
-## ----fn-sum-rates--------------------------------------------------------
+## ----fn-sum-rates-------------------------------------------------------------
 ## Make function to summarise rates in a given region
 rate_region <- function(df = NULL, metric = NULL) {
   
@@ -64,7 +61,7 @@ rate_region <- function(df = NULL, metric = NULL) {
               .funs = funs(. / e_pop_num * 1e5))
 }
 
-## ----fn-plot-regional-rates----------------------------------------------
+## ----fn-plot-regional-rates---------------------------------------------------
 ## Plotting function for rates
 plot_rate_region <- function(df = NULL, metric = NULL, title = NULL, subtitle = NULL, 
                              y_lab = NULL, scales = NULL) {
@@ -87,7 +84,7 @@ plot_rate_region <- function(df = NULL, metric = NULL, title = NULL, subtitle = 
     facet_wrap(~g_whoregion, scales = scales)
 }
 
-## ----plot-tb-inc-reg, message = FALSE------------------------------------
+## ----plot-tb-inc-reg, message = FALSE-----------------------------------------
 plot_inc_region <- tb_burden %>% 
   rate_region(metric = "e_inc_num") %>% 
   plot_rate_region(metric = "e_inc_num",
@@ -97,9 +94,9 @@ plot_inc_region <- tb_burden %>%
                    y_lab = "Tuberculosis Incidence Rates (per 100,000 population)")
 
 plot_inc_region +
-  labs(caption = "Source: World Health Organisation")
+  labs(caption = "Source: World Health Organization")
 
-## ----plot-tb-mort-reg, message = FALSE-----------------------------------
+## ----plot-tb-mort-reg, message = FALSE----------------------------------------
 plot_mort_region <- tb_burden %>% 
   rate_region(metric = "e_mort_num") %>% 
   plot_rate_region(metric = "e_mort_num",
@@ -109,9 +106,9 @@ plot_mort_region <- tb_burden %>%
                    y_lab = "Tuberculosis Mortality Rates (per 100,000 population)")
 
 plot_mort_region +
-  labs(caption = "Source: World Health Organisation")
+  labs(caption = "Source: World Health Organization")
 
-## ----sum-cfr-region------------------------------------------------------
+## ----sum-cfr-region-----------------------------------------------------------
 ## Summarise Case fatality rate by region - only availble for most recent year
 region_case_fat <- tb_burden %>% 
   filter(year %in% max(year)) %>% 
@@ -119,13 +116,13 @@ region_case_fat <- tb_burden %>%
   summarise(mean = mean(cfr, na.rm = TRUE),
             sd = sd(cfr, na.rm = TRUE)) %>% 
   mutate(ll = mean - sd,
-         lll = mean - 2*sd,
+         lll = mean - 2 * sd,
          hh = mean + sd,
          hhh = mean + 2 * sd)
 
 region_case_fat
 
-## ----est-regional-cfc-all-years------------------------------------------
+## ----est-regional-cfc-all-years-----------------------------------------------
 region_case_fatality <- tb_burden %>% 
   rate_region(metric = "e_inc_num") %>% 
   left_join(tb_burden %>% 
@@ -136,7 +133,7 @@ region_case_fatality <- tb_burden %>%
 
 region_case_fatality
 
-## ----plot-regional-cfr, message = FALSE----------------------------------
+## ----plot-regional-cfr, message = FALSE---------------------------------------
 plot_region_case_fatality <- region_case_fatality %>%
   plot_rate_region(metric = "case_fat_rate",
                    title = "Tuberculosis Case Fatality Rate",
@@ -145,14 +142,17 @@ plot_region_case_fatality <- region_case_fatality %>%
                    y_lab = "Estimated TB Case Fatality Ratio") +
   labs(caption = "Case fatality ratio estimated by taking the ratio of TB mortality rates and TB incidence rates each year in all years. For the most recent year 
        the mean regional case fatality ratio estimated by the WHO is also shown (along with one and two standard deviations)") +
-  geom_point(data = region_case_fat, aes(y = mean, x = year, fill = g_whoregion), shape = 2, size = 1.3, col = "black") +
-  geom_linerange(data = region_case_fat, aes(ymin = ll, ymax = hh, y = NULL), alpha = 0.4, size = 1.2, col = "black") +
-  geom_linerange(data = region_case_fat, aes(ymin = lll, ymax = hhh, y = NULL), alpha = 0.2, size = 1.2, col = "black")
+  geom_point(data = region_case_fat, aes(y = mean, x = year, fill = g_whoregion),
+             shape = 2, size = 1.3, col = "black") +
+  geom_linerange(data = region_case_fat, aes(ymin = ll, ymax = hh, y = NULL),
+                 alpha = 0.4, size = 1.2, col = "black") +
+  geom_linerange(data = region_case_fat, aes(ymin = lll, ymax = hhh, y = NULL),
+                 alpha = 0.2, size = 1.2, col = "black")
   
 plot_region_case_fatality +
-  labs(caption = "Source: World Health Organisation")
+  labs(caption = "Source: World Health Organization")
 
-## ----pull-highest-cfr-countries------------------------------------------
+## ----pull-highest-cfr-countries-----------------------------------------------
 highest_case_fataltity_countries <- tb_burden %>% 
   filter(year %in% max(year)) %>% 
   arrange(desc(cfr)) %>% 
@@ -161,11 +161,10 @@ highest_case_fataltity_countries <- tb_burden %>%
 
 highest_case_fataltity_countries
 
-## ----plot-highest-cfr-countries, message = FALSE, warning = FALSE--------
+## ----plot-highest-cfr-countries, message = FALSE, warning = FALSE-------------
 ## Plot overview of cases fatality ratios
 plot_high_cfr <- plot_tb_burden_overview(metric = "cfr", 
                                          countries = highest_case_fataltity_countries,
-                                         verbose = FALSE,
                                          viridis_palette = "cividis",
                                          viridis_direction = -1,
                                          viridis_end = 0.9) +
@@ -176,9 +175,8 @@ plot_high_cfr <- plot_tb_burden_overview(metric = "cfr",
 
 plot_high_cfr
 
-## ----plot-inc-rates-high-cfr, message = FALSE----------------------------
+## ----plot-inc-rates-high-cfr, message = FALSE---------------------------------
 plot_inc_high_cfr <- plot_tb_burden_overview(countries = highest_case_fataltity_countries,
-                                             verbose = FALSE,
                                              viridis_palette = "cividis",
                                              viridis_direction = -1,
                                              viridis_end = 0.9) +

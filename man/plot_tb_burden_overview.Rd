@@ -4,13 +4,28 @@
 \alias{plot_tb_burden_overview}
 \title{Plot an overview of TB Burden for Multiple Countries}
 \usage{
-plot_tb_burden_overview(df = NULL, dict = NULL,
-  metric = "e_inc_100k", metric_label = NULL, countries = NULL,
-  years = NULL, compare_to_region = FALSE, facet = NULL,
-  annual_change = FALSE, trans = "identity", legend = "right",
-  scales = "free_y", interactive = FALSE, download_data = TRUE,
-  save = TRUE, viridis_palette = "viridis", viridis_direction = -1,
-  viridis_end = 0.9, verbose = TRUE, ...)
+plot_tb_burden_overview(
+  df = NULL,
+  dict = NULL,
+  metric = "e_inc_100k",
+  metric_label = NULL,
+  countries = NULL,
+  years = NULL,
+  compare_to_region = FALSE,
+  facet = NULL,
+  annual_change = FALSE,
+  trans = "identity",
+  legend = "bottom",
+  scales = "free_y",
+  interactive = FALSE,
+  download_data = TRUE,
+  save = TRUE,
+  viridis_palette = "viridis",
+  viridis_direction = -1,
+  viridis_end = 0.9,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{df}{Dataframe of TB burden data, as sourced by \code{\link[getTBinR]{get_tb_burden}}.
@@ -67,7 +82,7 @@ See \code{\link[viridis]{scale_color_viridis}} for additional details.}
 \item{viridis_end}{Numeric between 0 and 1, defaults to 0.9. The end point of the viridis scale to use.
 #' See \code{\link[viridis]{scale_color_viridis}} for additional details.}
 
-\item{verbose}{Logical, defaults to \code{TRUE}. Should additional status and progress messages
+\item{verbose}{Logical, defaults to \code{FALSE}. Should additional status and progress messages
 be displayed.}
 
 \item{...}{Additional arguments to pass to \code{\link[getTBinR]{get_tb_burden}}.}
@@ -84,25 +99,33 @@ Tuberculosis over time and the progress towards global elimination.
 \examples{
 
 ## Plot incidence rates over time for both the United Kingdom and Botswana
-plot_tb_burden_overview(countries = c("United Kingdom", "Botswana"), 
-                        compare_to_region = FALSE)
- 
+plot_tb_burden_overview(
+  countries = c("United Kingdom", "Botswana"),
+  compare_to_region = FALSE
+)
+
 ## Plot percentage annual change in incidence rates.
-plot_tb_burden_overview(countries = c("United Kingdom", "Botswana"), 
-                        compare_to_region = FALSE, annual_change = TRUE)
-                         
+plot_tb_burden_overview(
+  countries = c("United Kingdom", "Botswana"),
+  compare_to_region = FALSE, annual_change = TRUE
+)
+
 ## Compare incidence rates in the UK and Botswana to incidence rates in their regions
-plot_tb_burden_overview(countries = c("United Kingdom", "Botswana"), 
-                        compare_to_region = TRUE)
-   
+plot_tb_burden_overview(
+  countries = c("United Kingdom", "Botswana"),
+  compare_to_region = TRUE
+)
+
 ## Find variables relating to mortality in the WHO dataset
 search_data_dict(def = "mortality")
-                   
+
 ## Compare mortality rates (exc HIV) in the UK and Botswana to mortality rates in their regions
 ## Do not show progress messages
-plot_tb_burden_overview(metric = "e_mort_exc_tbhiv_100k",
-                        countries = c("United Kingdom", "Botswana"), 
-                        compare_to_region = TRUE, verbose = FALSE)
+plot_tb_burden_overview(
+  metric = "e_mort_exc_tbhiv_100k",
+  countries = c("United Kingdom", "Botswana"),
+  compare_to_region = TRUE, verbose = FALSE
+)
 }
 \seealso{
 get_tb_burden search_data_dict

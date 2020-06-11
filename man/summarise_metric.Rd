@@ -4,9 +4,16 @@
 \alias{summarise_metric}
 \title{Summarise a TB Metric - A Quick Look Summary}
 \usage{
-summarise_metric(df = NULL, metric = NULL, countries = NULL,
-  conf = c("_lo", "_hi"), download_data = TRUE, save = TRUE,
-  verbose = TRUE, ...)
+summarise_metric(
+  df = NULL,
+  metric = NULL,
+  countries = NULL,
+  conf = c("_lo", "_hi"),
+  download_data = TRUE,
+  save = TRUE,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{df}{Dataframe of TB burden data, as sourced by \code{\link[getTBinR]{get_tb_burden}}.
@@ -27,7 +34,7 @@ downloaded from the specified URL?}
 \item{save}{Logical, should the data be saved for reuse during the current R session. Defaults to
 \code{TRUE}. If \code{TRUE} then the data is saved to the temporary directory specified by \code{\link[base]{tempdir}}.}
 
-\item{verbose}{Logical, defaults to \code{TRUE}. Should additional status and progress messages
+\item{verbose}{Logical, defaults to \code{FALSE}. Should additional status and progress messages
 be displayed.}
 
 \item{...}{Additional arguments to pass to \code{\link[getTBinR]{get_tb_burden}}.}
@@ -54,7 +61,7 @@ summarise_metric(metric = "c_cdr", countries = "France")
 ## Get a summary of case detection rates in France - without confidence intervals
 summarise_metric(metric = "c_cdr", countries = "France", conf = NULL)
 
-## Provide a dataset and get summary measures from it. 
+## Provide a dataset and get summary measures from it.
 tb <- get_tb_burden()
 summarise_metric(df = tb, metric = "c_cdr", countries = "France")
 }

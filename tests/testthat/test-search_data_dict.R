@@ -6,26 +6,31 @@ context("search_data_dict")
 ## Search for a known variable
 test_var <- search_data_dict(var = "country", download_data = TRUE, save = TRUE)
 
-exp_var <- tibble::tibble(variable_name = "country",
-                          dataset = "Country identification",
-                          code_list = "",
-                          definition = "Country or territory name")
+exp_var <- tibble::tibble(
+  variable_name = "country",
+  dataset = "Country identification",
+  code_list = "",
+  definition = "Country or territory name"
+)
 
 
 ## Search for all variables mentioning mortality in their definition
 test_def <- search_data_dict(def = "mortality")
 
-exp_def <- c("e_mort_100k", "e_mort_100k_hi", "e_mort_100k_lo",
-             "e_mort_exc_tbhiv_100k", "e_mort_exc_tbhiv_100k_hi",
-             "e_mort_exc_tbhiv_100k_lo", "e_mort_tbhiv_100k",
-             "e_mort_tbhiv_100k_hi", "e_mort_tbhiv_100k_lo")
+exp_def <- c(
+  "e_mort_100k", "e_mort_100k_hi", "e_mort_100k_lo",
+  "e_mort_exc_tbhiv_100k", "e_mort_exc_tbhiv_100k_hi",
+  "e_mort_exc_tbhiv_100k_lo", "e_mort_tbhiv_100k",
+  "e_mort_tbhiv_100k_hi", "e_mort_tbhiv_100k_lo"
+)
 
 ## Search for both a known variable and for mortality being mentioned in there definition
 ## Duplicate entries will be omitted.
 test_var_def <- search_data_dict(var = "e_mort_100k", def = "mortality")
 
 test_that("Variable search for a known variable returns expected results", {
-  expect_equal(exp_var, test_var)
+  expect_equal(colnames(exp_var), colnames(test_var))
+  expect_equal(unlist(exp_var), unlist(test_var))
 })
 
 test_that("Definition search for an unknown variable returns expected results", {
@@ -47,7 +52,7 @@ test_that("Combined variable and definition search returns expected results", {
 
 test_that("Dataset search for a known  dataset returns expected results", {
   test_data <- search_data_dict(dataset = "Estimates")
-  
+
   expect_true(!is.null(test_data))
   expect_equal("tbl_df", class(test_data)[1])
   expect_true(1 <= nrow(test_data))
@@ -57,8 +62,7 @@ test_that("Dataset search for a known  dataset returns expected results", {
 
 
 test_that("Searching for a attributes not present in the data returns an informative message and does not error.", {
-
-  expect_null(search_data_dict(var = 'g4gt23q2'))
-  expect_null(search_data_dict(def = 'g4gt23q2'))
-  expect_null(search_data_dict(dataset = 'g4gt23q2'))
+  expect_null(search_data_dict(var = "g4gt23q2"))
+  expect_null(search_data_dict(def = "g4gt23q2"))
+  expect_null(search_data_dict(dataset = "g4gt23q2"))
 })

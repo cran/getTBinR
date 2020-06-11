@@ -1,3 +1,25 @@
+# getTBinR 0.7.1
+
+## Feature updates
+
+* Switched dashboard to default to 2018 data.
+* Added a new WHO inspired `{ggplot2}` theme (`theme_who`) and colour palette (`who_palettes`) resolving issue [#86](https://github.com/seabbs/getTBinR/issues/86). Plus `scale_colour` and `scale_fill_who` functions for using the palette. Thanks to [@mariabnd](https://github.com/mariabnd) for implementing this.
+* Added a new function - `for_presentation` - to switch plots to presentation mode.
+
+## Package updates
+
+* Additional testing and examples to support the new WHO inspired theme and colour palettes.
+* Additional documentation for the new WHO inspired theme and colour palettes.
+* Updated the spelling of organisation to organization in all uses relating to the World Health Organization. Thanks to [@mariabnd](https://github.com/mariabnd) for spotting this.
+* Added [@mariabnd](https://github.com/mariabnd) as a package contributor.
+* Changed `verbose` to default to `FALSE` package wide.
+* Bumped data availability to 2018.
+* Standarised legend to be bottom aligned across the package.
+* Dropped `tidyverse` from suggests as per this [issue](https://github.com/seabbs/getTBinR/issues/96).
+* Fixed legend types as per this [issue](https://github.com/seabbs/getTBinR/issues/87)
+
+Thanks to [@mariabnd](https://github.com/mariabnd) for contributing to this release.
+
 # getTBinR 0.7.0
 
 ## Feature updates
@@ -52,8 +74,8 @@ wanted and rates were estimated for countries.
 * Improved package DESCRIPTION for CRAN only users - suggested during review for JOSS submission by @[rrrlw](https://github.com/rrrlw).
 * Used `usethis::use_tidy_description` to improve DESCRIPTION formatting.
 * Added development documentation badge to the README + website.
-* Moved to automated pkgdown deployment using travis. Based on [this](https://pkgdown.r-lib.org/reference/deploy_site_github.html) and the [dplyr](https://github.com/tidyverse/dplyr/blob/master/.travis.yml) implementation.
-* Expanded travis testing grid based on [dplyr](https://github.com/tidyverse/dplyr/blob/master/.travis.yml) implementation.
+* Moved to automated pkgdown deployment using travis. Based on [this](https://pkgdown.r-lib.org/reference/deploy_site_github.html) and the `dplyr` implementation.
+* Expanded travis testing grid based on `dplyr` implementation.
 * Updated earliest supported R version based on travis testing - now `3.2.0`. 
 * Used `usethis::use_tidy_versions()` to set package to dependent on package versions used during development work. Added this to makefile to make automated.
 * Added a git commit step to the `Makefile` use with `make message="your commit message". This will automatically run all build steps that are required and then commit any changes. 
@@ -73,6 +95,8 @@ summary plotting. Inspired by [this](https://www.samabbott.co.uk/getTBinR/articl
 * Added a `smooth` argument to `plot_tb_burden` to allow smooth trend lines to be plotted (derived using `ggplot2::geom_smooth`).
 * Tweaked line thickness in `plot_tb_burden` to improve plot appearance.
 * Added `legend` argument to all plotting functions to allow control of the legend appearance.
+* Added spell checking and list of allowed words.
+* Automated package styling using `usethis::use_tidy_style()` via the `styler` package. Based on this [issue](https://github.com/seabbs/getTBinR/issues/89).
 
 ## Package updates
 

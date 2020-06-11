@@ -1,33 +1,32 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE, comment = "#>",
   fig.width = 7, fig.height = 7, 
   fig.align = "center"
 )
 
-## ----get-packages, message = FALSE---------------------------------------
-# install.packages("getTBinR")
+## ----get-packages, message = FALSE--------------------------------------------
 library(getTBinR)
-#  install.packages("tidyverse")
-library(tidyverse)
-# install.packages("viridis")
+library(dplyr)
+library(ggplot2)
 library(viridis)
+library(knitr)
 
-## ----get-data, message = FALSE-------------------------------------------
+## ----get-data, message = FALSE------------------------------------------------
 tb_burden <- get_tb_burden()
 dict <- get_data_dict()
 
-## ----search-dict-inc-----------------------------------------------------
-search_data_dict(dict = dict, def = "incidence", verbose = FALSE) %>% 
+## ----search-dict-inc----------------------------------------------------------
+search_data_dict(dict = dict, def = "incidence") %>% 
   knitr::kable()
 
-## ----map-tb-2016-inc-----------------------------------------------------
+## ----map-tb-2016-inc----------------------------------------------------------
 map_tb_burden(df = tb_burden, dict = dict, year = 2016,
-              metric = "e_inc_100k", verbose = FALSE) +
+              metric = "e_inc_100k") +
   labs(title = "Map of Global Tuberculosis Incidence Rates - 2016",
-       subtitle = "", caption = "Source: World Health Organisation")
+       subtitle = "", caption = "Source: World Health Organization")
 
-## ----plot-region-tb-inc--------------------------------------------------
+## ----plot-region-tb-inc-------------------------------------------------------
 tb_inc_region <- tb_burden %>% 
   group_by(year, g_whoregion) %>% 
   summarise_at(.vars = vars(e_inc_num, e_inc_num_lo, e_inc_num_hi, e_pop_num),
@@ -37,14 +36,16 @@ tb_inc_region <- tb_burden %>%
 
 plot_tb_inc_region <- function(df = NULL, title = NULL, subtitle = NULL, scales = NULL) {
   df %>% 
-      ggplot(aes(x = year, y = e_inc_num_inc_rate, col = g_whoregion, group = g_whoregion)) +
+      ggplot(aes(x = year, y = e_inc_num_inc_rate,
+                 col = g_whoregion, group = g_whoregion)) +
   geom_point() +
-  geom_linerange(aes(ymin = e_inc_num_lo_inc_rate, ymax = e_inc_num_hi_inc_rate)) +
+  geom_linerange(aes(ymin = e_inc_num_lo_inc_rate, 
+                     ymax = e_inc_num_hi_inc_rate)) +
   geom_line() +
   scale_colour_viridis(discrete = TRUE) +
   labs(title = title, subtitle = subtitle, 
        x = "Year", y = "Tuberculosis Incidence Rates (per 100,000 population)",
-       caption = "Source: World Health Organisation") +
+       caption = "Source: World Health Organization") +
   theme_minimal() +
   theme(legend.position = "none") +
   facet_wrap(~g_whoregion, scales = scales)
@@ -55,13 +56,13 @@ tb_inc_region %>%
                      subtitle = "By WHO region, with a fixed y axis",
                      scales = "fixed")
 
-## ----plot-region-tb-inc-free---------------------------------------------
+## ----plot-region-tb-inc-free--------------------------------------------------
 tb_inc_region %>% 
   plot_tb_inc_region(title = "Global Tuberculosis Incidence Rates",
                      subtitle = "By WHO region, with a variable y axis",
                      scales = "free_y")
 
-## ----high-inc_increasing-------------------------------------------------
+## ----high-inc_increasing------------------------------------------------------
 countries_inc_up <- tb_burden %>% 
   filter(year %in% c(2000, 2016)) %>% 
   group_by(country) %>% 
@@ -82,35 +83,34 @@ high_inc_countries <- tb_burden %>%
 
 high_inc_up_countries <- intersect(countries_inc_up, high_inc_countries)
 
-## ----plot-tb-inc-high-inc-overview---------------------------------------
+## ----plot-tb-inc-high-inc-overview--------------------------------------------
 plot_tb_burden_overview(df = tb_burden,
                         dict = dict, 
                         metric = "e_inc_100k", 
-                        countries = high_inc_up_countries,
-                        verbose = FALSE) +
+                        countries = high_inc_up_countries) +
   labs(title = "Tuberculosis Incidence Rates from 2000-2016",
        subtitle = "Showing countries with the highest incidence rates in which incidence rates are increasing",
-       caption = "Source: World Health Organisation")
+       caption = "Source: World Health Organization")
 
-## ----plot-tb-inc-high-inc------------------------------------------------
+## ----plot-tb-inc-high-inc-----------------------------------------------------
 plot_tb_burden(df = tb_burden,
                dict = dict,
                metric = "e_inc_100k", countries = high_inc_up_countries, 
-               facet = "country", scales = "free_y", verbose = FALSE) +
+               facet = "country", scales = "free_y") +
   labs(title = "Tuberculosis Incidence Rates",
        subtitle = "Showing countries with the highest incidence rates in which incidence rates are increasing",
-       caption = "Source: World Health Organisation")
+       caption = "Source: World Health Organization")
 
-## ----search-dict-report--------------------------------------------------
-search_data_dict(dict = dict, def = "detection", verbose = FALSE) %>% 
+## ----search-dict-report-------------------------------------------------------
+search_data_dict(dict = dict, def = "detection") %>% 
   knitr::kable()
 
-## ----plot-tb-inc-high-case-----------------------------------------------
+## ----plot-tb-inc-high-case----------------------------------------------------
 plot_tb_burden(df = tb_burden,
                dict = dict,
                metric = "c_cdr", countries = high_inc_up_countries, 
-               facet = "country", scales = "free_y", verbose = FALSE) +
+               facet = "country", scales = "free_y") +
   labs(title = "Tuberculosis Detection Rates",
        subtitle = "Showing countries with the highest incidence rates in which incidence rates are increasing",
-       caption = "Source: World Health Organisation")
+       caption = "Source: World Health Organization")
 

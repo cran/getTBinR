@@ -4,13 +4,30 @@
 \alias{plot_tb_burden}
 \title{Plot TB Burden by Country}
 \usage{
-plot_tb_burden(df = NULL, dict = NULL, metric = "e_inc_100k",
-  metric_label = NULL, smooth = FALSE, conf = c("_lo", "_hi"),
-  countries = NULL, years = NULL, compare_to_region = FALSE,
-  facet = NULL, legend = "none", annual_change = FALSE,
-  trans = "identity", scales = "fixed", interactive = FALSE,
-  download_data = TRUE, save = TRUE, viridis_palette = "viridis",
-  viridis_direction = -1, viridis_end = 0.9, verbose = TRUE, ...)
+plot_tb_burden(
+  df = NULL,
+  dict = NULL,
+  metric = "e_inc_100k",
+  metric_label = NULL,
+  smooth = FALSE,
+  conf = c("_lo", "_hi"),
+  countries = NULL,
+  years = NULL,
+  compare_to_region = FALSE,
+  facet = NULL,
+  legend = "none",
+  annual_change = FALSE,
+  trans = "identity",
+  scales = "fixed",
+  interactive = FALSE,
+  download_data = TRUE,
+  save = TRUE,
+  viridis_palette = "viridis",
+  viridis_direction = -1,
+  viridis_end = 0.9,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{df}{Dataframe of TB burden data, as sourced by \code{\link[getTBinR]{get_tb_burden}}.
@@ -76,7 +93,7 @@ See \code{\link[viridis]{scale_color_viridis}} for additional details.}
 \item{viridis_end}{Numeric between 0 and 1, defaults to 0.9. The end point of the viridis scale to use.
 #' See \code{\link[viridis]{scale_color_viridis}} for additional details.}
 
-\item{verbose}{Logical, defaults to \code{TRUE}. Should additional status and progress messages
+\item{verbose}{Logical, defaults to \code{FALSE}. Should additional status and progress messages
 be displayed.}
 
 \item{...}{Additional arguments to pass to \code{\link[getTBinR]{get_tb_burden}}.}
@@ -100,24 +117,29 @@ sample_countries <- sample(unique(tb_burden$country), 9)
 
 ## Plot incidence rates in these countries
 plot_tb_burden(df = tb_burden, dict = dict, facet = "country", countries = sample_countries)
-
 \dontrun{
 ## Plot smoothed incidence rates in these countries
-plot_tb_burden(df = tb_burden, dict = dict, facet = "country", smooth = TRUE,
-               countries = sample_countries)
+plot_tb_burden(
+  df = tb_burden, dict = dict, facet = "country", smooth = TRUE,
+  countries = sample_countries
+)
 ## Use data caching to plot incidence rates with free y scales
 plot_tb_burden(facet = "country", countries = sample_countries, scales = "free_y")
- 
+
 ## Plot annual percentage change in incidence rates in selected countries
-plot_tb_burden(df = tb_burden, dict = dict, facet = "country", scales = "free_y", 
-               countries = sample_countries, annual_change = TRUE, conf = NULL)
-               
+plot_tb_burden(
+  df = tb_burden, dict = dict, facet = "country", scales = "free_y",
+  countries = sample_countries, annual_change = TRUE, conf = NULL
+)
+
 ## Find variables relating to mortality in the WHO dataset
 search_data_dict(def = "mortality")
 ## Plot mortality rates (exc HIV) - without progress messages
-plot_tb_burden(metric = "e_mort_exc_tbhiv_100k", facet = "country", 
-               countries = sample_countries, scales = "free_y", verbose = FALSE)
-}  
+plot_tb_burden(
+  metric = "e_mort_exc_tbhiv_100k", facet = "country",
+  countries = sample_countries, scales = "free_y"
+)
+}
 }
 \seealso{
 get_tb_burden search_data_dict

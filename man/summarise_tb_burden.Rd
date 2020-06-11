@@ -4,13 +4,29 @@
 \alias{summarise_tb_burden}
 \title{Summarise TB Burden - By Region, Globally and for Custom Groups}
 \usage{
-summarise_tb_burden(df = NULL, dict = NULL, metric = "e_inc_num",
-  metric_label = NULL, conf = c("_lo", "_hi"), years = NULL,
-  samples = 1000, countries = NULL, compare_to_region = FALSE,
-  compare_to_world = TRUE, custom_compare = NULL,
-  compare_all_regions = TRUE, stat = "rate", denom = "e_pop_num",
-  rate_scale = 1e+05, truncate_at_zero = TRUE, annual_change = FALSE,
-  download_data = TRUE, save = TRUE, verbose = TRUE, ...)
+summarise_tb_burden(
+  df = NULL,
+  dict = NULL,
+  metric = "e_inc_num",
+  metric_label = NULL,
+  conf = c("_lo", "_hi"),
+  years = NULL,
+  samples = 1000,
+  countries = NULL,
+  compare_to_region = FALSE,
+  compare_to_world = TRUE,
+  custom_compare = NULL,
+  compare_all_regions = TRUE,
+  stat = "rate",
+  denom = "e_pop_num",
+  rate_scale = 1e+05,
+  truncate_at_zero = TRUE,
+  annual_change = FALSE,
+  download_data = TRUE,
+  save = TRUE,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{df}{Dataframe of TB burden data, as sourced by \code{\link[getTBinR]{get_tb_burden}}.
@@ -69,20 +85,20 @@ downloaded from the specified URL?}
 \item{save}{Logical, should the data be saved for reuse during the current R session. Defaults to
 \code{TRUE}. If \code{TRUE} then the data is saved to the temporary directory specified by \code{\link[base]{tempdir}}.}
 
-\item{verbose}{Logical, defaults to \code{TRUE}. Should additional status and progress messages
+\item{verbose}{Logical, defaults to \code{FALSE}. Should additional status and progress messages
 be displayed.}
 
 \item{...}{Additional arguments to pass to \code{\link[getTBinR]{get_tb_burden}}.}
 }
 \value{
-A tibble containing summarised values (with 95% confidence intervals) for the metric of choice
+A tibble containing summarised values (with 95\% confidence intervals) for the metric of choice
 stratified by area and year.
 }
 \description{
 Summarise TB burden metrics by region, globally, and for custom groupings. For variables with
 uncertainty represented by confidence intervals bootstrapping can be used (assuming a normal distribution) to
 include this in any estimated summary measures. Currently two statistics are supported; the mean (with
-95\% confidence intervals) and the median (with 95\% interquartile range), rates and proportions.
+95\\% confidence intervals) and the median (with 95\\% interquartile range), rates and proportions.
 }
 \examples{
 
@@ -91,41 +107,49 @@ tb_burden <- get_tb_burden()
 most_recent_year <- max(tb_burden$year)
 
 ## Get summary of the e_mdr_pct_rr_new cases
-summarise_tb_burden(metric = "e_mdr_pct_rr_new",
-                    years =  most_recent_year,
-                    stat = "mean",
-                    samples = 100,
-                    compare_all_regions = TRUE,
-                    compare_to_world = TRUE,
-                    verbose = TRUE)
+summarise_tb_burden(
+  metric = "e_mdr_pct_rr_new",
+  years = most_recent_year,
+  stat = "mean",
+  samples = 100,
+  compare_all_regions = TRUE,
+  compare_to_world = TRUE,
+  verbose = TRUE
+)
 \dontrun{
 ## Get median (with 95\% IQR) of the case fatality rate for regions and the world
 ## Boostrapping uncertainty in country measures
-summarise_tb_burden(metric = "cfr",
-                    years =  most_recent_year,
-                    samples = 100,
-                    stat = "median",
-                    compare_all_regions = TRUE,
-                    compare_to_world = TRUE,
-                    verbose = FALSE)
+summarise_tb_burden(
+  metric = "cfr",
+  years = most_recent_year,
+  samples = 100,
+  stat = "median",
+  compare_all_regions = TRUE,
+  compare_to_world = TRUE,
+  verbose = FALSE
+)
 
 
 ## Get summary data for the UK, Europe and the world
-## Bootstrapping CI's 
-summarise_tb_burden(metric = "e_inc_num",
-                    samples = 100,
-                    stat = "median",
-                    countries = "United Kingdom", 
-                    compare_to_world = TRUE, 
-                    compare_to_region = TRUE,
-                    verbose = FALSE)
-                    
- ## Get an overview of incidence rates regionally and globally compared to the UK
-summarise_tb_burden(metric = "e_inc_num",
-                    stat = "rate",
-                    countries = "United Kingdom", 
-                    compare_to_world = TRUE, 
-                    compare_to_region = TRUE,
-                    verbose = FALSE) 
-}                     
+## Bootstrapping CI's
+summarise_tb_burden(
+  metric = "e_inc_num",
+  samples = 100,
+  stat = "median",
+  countries = "United Kingdom",
+  compare_to_world = TRUE,
+  compare_to_region = TRUE,
+  verbose = FALSE
+)
+
+## Get an overview of incidence rates regionally and globally compared to the UK
+summarise_tb_burden(
+  metric = "e_inc_num",
+  stat = "rate",
+  countries = "United Kingdom",
+  compare_to_world = TRUE,
+  compare_to_region = TRUE,
+  verbose = FALSE
+)
+}
 }
